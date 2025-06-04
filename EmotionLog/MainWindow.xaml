@@ -1,0 +1,36 @@
+﻿<Window x:Class="EmotionLog.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EmotionLog"
+        mc:Ignorable="d"
+        Title="Emotion Log" Height="598" Width="525">
+    <Grid HorizontalAlignment="Center" Width="525" Margin="0,0,0,-6">
+        <TextBlock x:Name="DateTextBlock" HorizontalAlignment="Left" Height="25" Margin="24,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="112"><Run Language="ja-jp" Text="aaaaaaaaaaaaaaaaaa"/></TextBlock>
+        <TextBlock HorizontalAlignment="Center" Height="25" Margin="0,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="112"><Run Language="ja-jp" Text="日連続で記録中！"/></TextBlock>
+        <ComboBox x:Name="GoalComboBox" HorizontalAlignment="Left" Margin="24,63,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="GoalComboBox_SelectionChanged">
+        </ComboBox>
+        <Button x:Name="GoalSaveButton" Content="登録" HorizontalAlignment="Left" Margin="154,64,0,0" VerticalAlignment="Top" Click="Button_Click" Width="32"/>
+        <CheckBox x:Name="RoutineCheckBox" Content="" HorizontalAlignment="Left" Margin="206,66,0,0" VerticalAlignment="Top" Checked="RoutineCheckBox_Checked" Unchecked="RoutineCheckBox_UnChecked" Width="20" Height="20" Grid.RowSpan="1"/>
+        <Button x:Name="SaveButton" Content="登録" HorizontalAlignment="Left" Margin="329,64,0,0" VerticalAlignment="Top" Click="Button_Click" Width="32"/>
+        <TextBlock x:Name="Total" HorizontalAlignment="Left" Margin="244,66,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="ja-jp" Text="1"/></TextBlock>
+        <TextBlock HorizontalAlignment="Center" Margin="0,66,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="ja-jp" Text="/"/></TextBlock>
+        <TextBlock x:Name="GoalCount" HorizontalAlignment="Left" Margin="280,66,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="ja-jp" Text="1"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="299,66,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="ja-jp" Text="回"/></TextBlock>
+        <TextBlock x:Name="Morning" HorizontalAlignment="Left" Margin="66,123,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.589,1.926"><Run Language="ja-jp" Text="🌅"/></TextBlock>
+        <TextBlock x:Name="Noon" HorizontalAlignment="Left" Margin="66,196,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="-0.016,0.662"><Run Language="ja-jp" Text="🌞"/></TextBlock>
+        <TextBlock x:Name="Evening" HorizontalAlignment="Left" Margin="66,268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.7,2.196"><Run Language="ja-jp" Text="🌙"/></TextBlock>
+        <TextBox x:Name="MorningTextBox" HorizontalAlignment="Left" Margin="135,102,0,0" TextWrapping="Wrap" Text="この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ" VerticalAlignment="Top" Width="226" Height="65" TextChanged="MorningTextBox_TextChanged" FontSize="9"/>
+        <TextBox x:Name="NoonTextBox" HorizontalAlignment="Left" Margin="135,175,0,0" TextWrapping="Wrap" Text="この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ" VerticalAlignment="Top" Width="226" Height="65" FontSize="9"/>
+        <TextBox x:Name="EveningTextBox" HorizontalAlignment="Left" Margin="135,247,0,0" TextWrapping="Wrap" Text="この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ" VerticalAlignment="Top" Width="226" Height="65" TextChanged="EveningTextBox_TextChanged" FontSize="9"/>
+        <ComboBox x:Name="MorningComboBox" HorizontalAlignment="Left" Margin="374,102,0,0" VerticalAlignment="Top" Width="100"/>
+        <ComboBox x:Name="NoonComboBox" HorizontalAlignment="Left" Margin="374,175,0,0" VerticalAlignment="Top" Width="100"/>
+        <ComboBox x:Name="EveningComboBox" HorizontalAlignment="Left" Margin="374,247,0,0" VerticalAlignment="Top" Width="100"/>
+        <Button Content="保存" HorizontalAlignment="Left" Margin="374,134,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
+        <Button Content="保存" HorizontalAlignment="Left" Margin="374,208,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
+        <Button Content="保存" HorizontalAlignment="Left" Margin="374,276,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
+        <Button Content="過去の記録をみる" HorizontalAlignment="Left" Margin="354,340,0,0" VerticalAlignment="Top" Click="Button_Click_2" Width="120" Height="27"/>
+        <TextBlock x:Name="ConsecutiveRecord" HorizontalAlignment="Left" Margin="195,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="ja-jp" Text="0"/></TextBlock>
+    </Grid>
+</Window>
