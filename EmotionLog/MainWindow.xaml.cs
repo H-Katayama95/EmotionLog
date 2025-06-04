@@ -34,8 +34,12 @@ namespace EmotionLog
             LoadEmotionTypes();
             // 目標進捗のデータを読み込む
             LoadGoalProgresses();
-            // 感情ログのデータを読み込む
+            // 連続記録日数を読み込む
+            LoadConsecutiveRecord();
+            // システム起動日の感情ログを読み込む
             LoadEmotionLogs();
+            // ルーチンチェックのデータを読み込む
+            LoadRoutineCheck();
         }
 
         private void LoadGoals()
@@ -71,12 +75,29 @@ namespace EmotionLog
             Total.Text = goalProgresses.Where(x => x.GoalProgressId == 1).First().Total.ToString();
         }
 
+        // システム起動日の感情ログを取得し、出来事と感情を設定する
         private void LoadEmotionLogs()
         {
             var repo = new EmotionLogsRepository();
-            List<EmotionLogs> emotionLogs = repo.GetEmotionLogs();
-            // 仮で連続記録日数を抽出し設定
-            ConsecutiveRecord.Text = emotionLogs.Where(x => x.EmotionLogId == 1).First().ConsecutiveRecord.ToString("d");
+            EmotionLogs emotionLogs = repo.GetEmotionLogs();
+            // 出来事を設定
+            MorningTextBox.Text = emotionLogs.MoringDetail ?? string.Empty;
+            NoonTextBox.Text = emotionLogs.NoonDetail ?? string.Empty;
+            EveningTextBox.Text = emotionLogs.EveningDetail ?? string.Empty;
+        }
+
+        // システム起動日の1日前の連続記録日数を取得
+        private void LoadConsecutiveRecord()
+        {
+            var repo = new EmotionLogsRepository();
+            int consecutiveRecord = repo.GetConsecutiveRecord();
+            ConsecutiveRecord.Text = consecutiveRecord.ToString("d");
+        }
+
+        private void LoadRoutineCheck()
+        {
+            var repo = new RoutineCheckRepository();
+            List<RoutineCheck> routineChecks = repo.GetRoutineCheck();
         }
 
         private void GoalComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

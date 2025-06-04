@@ -9,10 +9,13 @@ namespace EmotionLog.Models
     public class EmotionLogs
     {
         public int EmotionLogId { get; set; }
-        public int EmotionTypeId { get; set; }
         public DateTime RecordDate { get; set; }
-        public int TimeZone { get; set; } // 0: Morning, 1: Noon, 2: Evening
-        public string? Detail { get; set; }
+        public int? MorningEmotionType { get; set; }
+        public int? NoonEmotionType { get; set; }
+        public int? EveningEmotionType { get; set; }
+        public string? MoringDetail { get; set; }
+        public string? NoonDetail { get; set; }
+        public string? EveningDetail { get; set; }
         public int ConsecutiveRecord { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
