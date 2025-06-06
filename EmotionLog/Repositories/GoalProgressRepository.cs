@@ -19,7 +19,10 @@ namespace EmotionLog.Repositories
             using var command = connection.CreateCommand();
             connection.Open();
 
-            command.CommandText = "SELECT * FROM goal_progress;";
+            command.CommandText = @"
+                SELECT * FROM goal_progress
+                ORDER BY ABS(record_date - CURRENT_DATE) ASC
+                LIMIT 1;";
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {
@@ -30,9 +33,10 @@ namespace EmotionLog.Repositories
                     GoalSetDate = reader.GetDateTime(2),
                     GoalAchievedDate = reader.IsDBNull(3) ? (DateTime?)null : reader.GetDateTime(3),
                     Total = reader.GetInt32(4),
-                    IsAchieved = reader.GetBoolean(5),
+                    GoalStatus = reader.GetBoolean(5),
                     CreatedAt = reader.GetDateTime(6),
-                    UpdatedAt = reader.GetDateTime(7)
+                    UpdatedAt = reader.GetDateTime(7),
+                    RecordDate = reader.GetDateTime(8)
                 });
             }
             return list;

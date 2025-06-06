@@ -12,9 +12,11 @@ namespace EmotionLog.Models
         public int GoalId { get; set; }
         public DateTime GoalSetDate { get; set; }
         public DateTime? GoalAchievedDate { get; set; }
-        public int Total { get; set; }
-        public bool IsAchieved { get; set; }
+        public int Total {get; set; }
+        public bool GoalStatus { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+
+        public DateTime RecordDate { get; set; }
     }
 }

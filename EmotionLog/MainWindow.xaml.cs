@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,7 +12,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using EmotionLog.Models;
 using EmotionLog.Repositories;
-using EmotionLog.ViewModels;
 
 namespace EmotionLog
 {
@@ -50,8 +50,20 @@ namespace EmotionLog
             GoalComboBox.ItemsSource = goals;
             GoalComboBox.DisplayMemberPath = "GoalContent";
             GoalComboBox.SelectedValuePath = "GoalId";
-            GoalComboBox.SelectedValuePath = "GoalCount";
+
+            // 登録済の場合、目標を取得し、コンボボックスに設定
+            var goalProgressRepo = new GoalProgressRepository();
+            List<GoalProgress> goalProgresses = goalProgressRepo.GetGoalProgress();
+            
+            if (goalProgresses != null)
+            {
+                GoalProgress goalId = goalProgresses.Where(x => !x.GoalStatus).FirstOrDefault();
+
+                // 最も近い目標を選択
+                GoalComboBox.SelectedValue = goalId?.GoalId;
+            }
         }
+
 
         private void LoadEmotionTypes()
         {
@@ -66,13 +78,24 @@ namespace EmotionLog
             EveningComboBox.ItemsSource = emotionTypes;
             EveningComboBox.DisplayMemberPath = "EmotionName";
             EveningComboBox.SelectedValuePath = "EmotionTypeId";
+
+            // 登録済の場合、感情ログを取得し、コンボボックスに設定
+            var logsRepo = new EmotionLogsRepository();
+            EmotionLogs emotionLogs = logsRepo.GetEmotionLogs();
+            if (emotionLogs !=  null)
+            {
+                MorningComboBox.SelectedValue = emotionLogs.MorningEmotionType;
+                NoonComboBox.SelectedValue = emotionLogs.NoonEmotionType;
+                EveningComboBox.SelectedValue = emotionLogs.EveningEmotionType;
+            }
         }
         private void LoadGoalProgresses()
         {
             var repo = new GoalProgressRepository();
             List<GoalProgress> goalProgresses = repo.GetGoalProgress();
-            // 仮でトータル回数を抽出し設定
-            Total.Text = goalProgresses.Where(x => x.GoalProgressId == 1).First().Total.ToString();
+            // 登録済のトータル回数を抽出し設定
+            GoalProgress total = goalProgresses.Where(x => !x.GoalStatus).FirstOrDefault();
+            Total.Text = total?.Total.ToString() ?? "0";    
         }
 
         // システム起動日の感情ログを取得し、出来事と感情を設定する
@@ -102,7 +125,9 @@ namespace EmotionLog
 
         private void GoalComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string goalCount = GoalComboBox.SelectedValue?.ToString() ?? "0";
+            var selectedGoal = GoalComboBox.SelectedItem as Goal;
+
+            string goalCount = selectedGoal.GoalCount.ToString() ?? "0";
             GoalCount.Text = goalCount;
         }
 
