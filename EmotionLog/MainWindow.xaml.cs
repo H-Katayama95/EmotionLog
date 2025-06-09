@@ -64,7 +64,6 @@ namespace EmotionLog
             }
         }
 
-
         private void LoadEmotionTypes()
         {
             var repo = new EmotionRepository();
@@ -89,6 +88,7 @@ namespace EmotionLog
                 EveningComboBox.SelectedValue = emotionLogs.EveningEmotionType;
             }
         }
+
         private void LoadGoalProgresses()
         {
             var repo = new GoalProgressRepository();
@@ -104,7 +104,7 @@ namespace EmotionLog
             var repo = new EmotionLogsRepository();
             EmotionLogs emotionLogs = repo.GetEmotionLogs();
             // 出来事を設定
-            MorningTextBox.Text = emotionLogs.MoringDetail ?? string.Empty;
+            MorningTextBox.Text = emotionLogs.MorningDetail ?? string.Empty;
             NoonTextBox.Text = emotionLogs.NoonDetail ?? string.Empty;
             EveningTextBox.Text = emotionLogs.EveningDetail ?? string.Empty;
         }
@@ -131,9 +131,52 @@ namespace EmotionLog
             GoalCount.Text = goalCount;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        // 朝の記録と感情を保存
+        private void MorningSaveButton_Click(object sender, RoutedEventArgs e)
         {
+            var repo = new EmotionLogsRepository();
+            EmotionLogs emotionLogs = new EmotionLogs
+            {
+                MorningDetail = MorningTextBox.Text != null ? MorningTextBox.Text : string.Empty,
+                MorningEmotionType = MorningComboBox.SelectedValue != null ? (int)MorningComboBox.SelectedValue : 0,
+                NoonDetail = NoonTextBox.Text != null ? NoonTextBox.Text : string.Empty,
+                NoonEmotionType = NoonComboBox.SelectedValue != null ? (int)NoonComboBox.SelectedValue : 0,
+                EveningDetail = EveningTextBox.Text != null ? EveningTextBox.Text : string.Empty,
+                EveningEmotionType = EveningComboBox.SelectedValue != null ? (int)EveningComboBox.SelectedValue : 0
+            };
+            repo.UpsertEmotionLogs(emotionLogs);
+        }
 
+        // 昼の記録と感情を保存
+        private void NoonSaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var repo = new EmotionLogsRepository();
+            EmotionLogs emotionLogs = new EmotionLogs
+            {
+                MorningDetail = MorningTextBox.Text != null ? MorningTextBox.Text : string.Empty,
+                MorningEmotionType = MorningComboBox.SelectedValue != null ? (int)MorningComboBox.SelectedValue : 0,
+                NoonDetail = NoonTextBox.Text != null ? NoonTextBox.Text : string.Empty,
+                NoonEmotionType = NoonComboBox.SelectedValue != null ? (int)NoonComboBox.SelectedValue : 0,
+                EveningDetail = EveningTextBox.Text != null ? EveningTextBox.Text : string.Empty,
+                EveningEmotionType = EveningComboBox.SelectedValue != null ? (int)EveningComboBox.SelectedValue : 0
+            };
+            repo.UpsertEmotionLogs(emotionLogs);
+        }
+
+        // 夜の記録と感情を保存
+        private void EveningSaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var repo = new EmotionLogsRepository();
+            EmotionLogs emotionLogs = new EmotionLogs
+            {
+                MorningDetail = MorningTextBox.Text != null ? MorningTextBox.Text : string.Empty,
+                MorningEmotionType = MorningComboBox.SelectedValue != null ? (int)MorningComboBox.SelectedValue : 0,
+                NoonDetail = NoonTextBox.Text != null ? NoonTextBox.Text : string.Empty,
+                NoonEmotionType = NoonComboBox.SelectedValue != null ? (int)NoonComboBox.SelectedValue : 0,
+                EveningDetail = EveningTextBox.Text != null ? EveningTextBox.Text : string.Empty,
+                EveningEmotionType = EveningComboBox.SelectedValue != null ? (int)EveningComboBox.SelectedValue : 0
+            };
+            repo.UpsertEmotionLogs(emotionLogs);
         }
 
         private void RoutineCheckBox_Checked(object sender, RoutedEventArgs e)
@@ -158,6 +201,14 @@ namespace EmotionLog
         private void EveningTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
+        }
+
+        private void GoalSaveButton_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void RoutineSaveButton_Click(object sender, RoutedEventArgs e)
+        {
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

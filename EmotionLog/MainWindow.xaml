@@ -34,14 +34,14 @@
                   SelectionChanged="GoalComboBox_SelectionChanged"/>
         
         <Button x:Name="GoalSaveButton" Content="登録" HorizontalAlignment="Left" Margin="154,64,0,0"
-                VerticalAlignment="Top" Click="Button_Click" Width="32"/>
+                VerticalAlignment="Top" Click="GoalSaveButton_Click" Width="32"/>
 
         <CheckBox x:Name="RoutineCheckBox" HorizontalAlignment="Left" Margin="206,66,0,0"
                   VerticalAlignment="Top" Checked="RoutineCheckBox_Checked" 
                   Unchecked="RoutineCheckBox_UnChecked" Width="20" Height="20"/>
 
-        <Button x:Name="SaveButton" Content="登録" HorizontalAlignment="Left" Margin="329,64,0,0"
-                VerticalAlignment="Top" Click="Button_Click" Width="32"/>
+        <Button x:Name="RotineSaveButton" Content="登録" HorizontalAlignment="Left" Margin="329,64,0,0"
+                VerticalAlignment="Top" Click="RoutineSaveButton_Click" Width="32"/>
 
         <!-- 目標の合計 -->
         <TextBlock x:Name="Total" HorizontalAlignment="Left" Margin="244,66,0,0"
@@ -77,8 +77,8 @@
         <ComboBox x:Name="MorningComboBox" HorizontalAlignment="Left" Margin="374,102,0,0"
                   VerticalAlignment="Top" Width="100"/>
 
-        <Button Content="保存" HorizontalAlignment="Left" Margin="374,134,0,0"
-                VerticalAlignment="Top" Click="Button_Click_1"/>
+        <Button x:Name="MorningSaveButton" Content="保存" HorizontalAlignment="Left" Margin="374,134,0,0"
+                VerticalAlignment="Top" Click="MorningSaveButton_Click"/>
 
         <TextBlock x:Name="Noon" HorizontalAlignment="Left" Margin="66,196,0,0"
                    TextWrapping="Wrap" VerticalAlignment="Top">
@@ -92,7 +92,7 @@
                   VerticalAlignment="Top" Width="100"/>
 
         <Button Content="保存" HorizontalAlignment="Left" Margin="374,208,0,0"
-                VerticalAlignment="Top" Click="Button_Click_1"/>
+                VerticalAlignment="Top" Click="NoonSaveButton_Click"/>
 
         <TextBlock x:Name="Evening" HorizontalAlignment="Left" Margin="66,268,0,0"
                    TextWrapping="Wrap" VerticalAlignment="Top">
@@ -107,7 +107,7 @@
                   VerticalAlignment="Top" Width="100"/>
 
         <Button Content="保存" HorizontalAlignment="Left" Margin="374,276,0,0"
-                VerticalAlignment="Top" Click="Button_Click_1"/>
+                VerticalAlignment="Top" Click="EveningSaveButton_Click"/>
 
         <!-- その他 -->
         <Button Content="過去の記録をみる" HorizontalAlignment="Left" Margin="354,340,0,0"

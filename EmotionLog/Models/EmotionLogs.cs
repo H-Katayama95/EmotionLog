@@ -13,9 +13,9 @@ namespace EmotionLog.Models
         public int? MorningEmotionType { get; set; }
         public int? NoonEmotionType { get; set; }
         public int? EveningEmotionType { get; set; }
-        public string? MoringDetail { get; set; }
-        public string? NoonDetail { get; set; }
-        public string? EveningDetail { get; set; }
+        public string? MorningDetail { get; set; } ="";
+        public string? NoonDetail { get; set; } = "";
+        public string? EveningDetail { get; set; } = "";
         public int ConsecutiveRecord { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
