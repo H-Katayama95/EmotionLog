@@ -51,16 +51,17 @@ namespace EmotionLog
             GoalComboBox.DisplayMemberPath = "GoalContent";
             GoalComboBox.SelectedValuePath = "GoalId";
 
-            // 登録済の場合、目標を取得し、コンボボックスに設定
+            // 目標を登録済の場合、目標コンボボックスに設定
             var goalProgressRepo = new GoalProgressRepository();
             List<GoalProgress> goalProgresses = goalProgressRepo.GetGoalProgress();
             
-            if (goalProgresses != null)
+            if (goalProgresses.Count > 0)
             {
                 GoalProgress goalId = goalProgresses.Where(x => !x.GoalStatus).FirstOrDefault();
 
-                // 最も近い目標を選択
+                // 登録済の目標を設定
                 GoalComboBox.SelectedValue = goalId?.GoalId;
+                GoalSaveButton.Content = "変更"; // ボタンのテキストを変更
             }
         }
 
@@ -227,7 +228,61 @@ namespace EmotionLog
 
         private void GoalSaveButton_Click(object sender, RoutedEventArgs e)
         {
+            var repo = new GoalProgressRepository();
+
+            int selectedGoalId = GoalComboBox.SelectedValue != null ? (int)GoalComboBox.SelectedValue : 0;
+
+            // 目標が選択されているかチェック
+            bool isChecked = repo.IsGoalSelected(selectedGoalId);
+
+            if (!isChecked)
+            {
+                MessageBox.Show("目標を選択してください。", "選択エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            else
+            {
+                List<GoalProgress> goalProgresses = repo.GetGoalProgress();
+                if (goalProgresses.Count > 0)
+                {
+                    if (MessageBoxResult.Cancel == MessageBox.Show("目標を変更してもよいでしょうか。", "変更確認", MessageBoxButton.OKCancel, MessageBoxImage.Information))
+                    {
+                        return; // キャンセルされた場合は処理を中止
+                    }
+                    else
+                    {
+                        // （仮）更新処理に変える
+                        repo.InsertGoalProgress(new GoalProgress
+                        {
+                            GoalId = (int)GoalComboBox.SelectedValue,
+                            GoalSetDate = DateTime.Now,
+                            Total = 0, // 初期値は0
+                            GoalStatus = false, // 初期状態は未達成
+                            CreatedAt = DateTime.Now,
+                            UpdatedAt = DateTime.Now,
+                            RecordDate = DateTime.Now
+                        });
+                    }
+                }
+                else
+                {
+                    repo.InsertGoalProgress(new GoalProgress
+                    {
+                        GoalId = (int)GoalComboBox.SelectedValue,
+                        GoalSetDate = DateTime.Now,
+                        Total = 0, // 初期値は0
+                        GoalStatus = false, // 初期状態は未達成
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now,
+                        RecordDate = DateTime.Now
+                    });
+                    MessageBox.Show("目標を登録しました。", "登録完了", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                // 目標を登録したので、ボタンのテキストを変更
+                GoalSaveButton.Content = "変更";
+            }
         }
+
 
         private void RoutineSaveButton_Click(object sender, RoutedEventArgs e)
         {

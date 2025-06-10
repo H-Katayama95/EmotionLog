@@ -70,15 +70,6 @@ namespace EmotionLog.Repositories
                 using var command = connection.CreateCommand();
                 connection.Open();
 
-                command.Parameters.AddWithValue("recordDate", DateTime.Now);
-                command.Parameters.AddWithValue("morningEmotionType", emotionLogs.MorningEmotionType);
-                command.Parameters.AddWithValue("noonEmotionType", emotionLogs.NoonEmotionType);
-                command.Parameters.AddWithValue("eveningEmotionType", emotionLogs.EveningEmotionType);
-                command.Parameters.AddWithValue("morningDetail", emotionLogs.MorningDetail);
-                command.Parameters.AddWithValue("noonDetail", emotionLogs.NoonDetail);
-                command.Parameters.AddWithValue("eveningDetail", emotionLogs.EveningDetail);
-                command.Parameters.AddWithValue("consecutiveRecord", emotionLogs.ConsecutiveRecord);
-
                 command.CommandText = @"
                 INSERT INTO emotion_logs (
                     record_date,
@@ -111,6 +102,15 @@ namespace EmotionLog.Repositories
                     evening_detail = EXCLUDED.evening_detail,
                     updated_at = NOW();
                 ";
+
+                command.Parameters.AddWithValue("recordDate", DateTime.Now);
+                command.Parameters.AddWithValue("morningEmotionType", emotionLogs.MorningEmotionType);
+                command.Parameters.AddWithValue("noonEmotionType", emotionLogs.NoonEmotionType);
+                command.Parameters.AddWithValue("eveningEmotionType", emotionLogs.EveningEmotionType);
+                command.Parameters.AddWithValue("morningDetail", emotionLogs.MorningDetail);
+                command.Parameters.AddWithValue("noonDetail", emotionLogs.NoonDetail);
+                command.Parameters.AddWithValue("eveningDetail", emotionLogs.EveningDetail);
+                command.Parameters.AddWithValue("consecutiveRecord", emotionLogs.ConsecutiveRecord);
 
                 command.ExecuteNonQuery();
 
