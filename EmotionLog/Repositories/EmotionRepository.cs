@@ -19,7 +19,7 @@ namespace EmotionLog.Repositories
             using var command = connection.CreateCommand();
             connection.Open();
 
-            command.CommandText = "SELECT * FROM emotion_master;";
+            command.CommandText = "SELECT * FROM emotion_master ORDER BY emotion_type_id ASC;";
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {

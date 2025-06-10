@@ -20,4 +20,9 @@ namespace EmotionLog.Models
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
+    public class ConsecutiveRecord
+    {
+        public int Yesterday_Consecutive_Record { get; set; }
+        public int Today_Consecutive_Record { get; set; }
+    }
 }

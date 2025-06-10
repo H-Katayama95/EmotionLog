@@ -149,12 +149,57 @@ namespace EmotionLog.Repositories
 
             command.CommandText = "SELECT consecutive_record FROM emotion_logs WHERE record_date = CURRENT_DATE - INTERVAL '1 day';";
             using var reader = command.ExecuteReader();
+            // 1日前のデータがない場合は0を返す
             if (reader.Read())
             {
                 consecutiveRecord = reader.GetInt32(0);
             }
             return consecutiveRecord;
         }
+        
+        public ConsecutiveRecord GetConsecutiveRecords()
+        {
+            ConsecutiveRecord recordStreak = new ConsecutiveRecord();
+
+            using var connection = GetConnection();
+            using var command = connection.CreateCommand();
+            connection.Open();
+
+            command.CommandText = @"
+            WITH
+            yesterday_data AS(
+            SELECT consecutive_record
+            FROM public.emotion_logs
+            WHERE record_date = CURRENT_DATE - INTERVAL '1 day'
+            LIMIT 1),
+            today_data AS(
+            SELECT consecutive_record
+            FROM public.emotion_logs
+            WHERE record_date = CURRENT_DATE
+            LIMIT 1)
+            SELECT 
+              COALESCE((SELECT consecutive_record FROM yesterday_data), 0) AS Yesterday_consecutive_record,
+              COALESCE((SELECT consecutive_record FROM today_data), 0) AS Today_consecutive_record;";
+            
+            using var reader = command.ExecuteReader();
+            if (!reader.Read())
+            {
+                return recordStreak = new ConsecutiveRecord
+                {
+                    Yesterday_Consecutive_Record = 0,
+                    Today_Consecutive_Record = 0
+                };
+            }
+            else
+            {
+                return recordStreak = new ConsecutiveRecord
+                {
+                    Yesterday_Consecutive_Record = reader.GetInt32(0),
+                    Today_Consecutive_Record = reader.GetInt32(1)
+                };
+            }
+        }
     }
+
 }
 

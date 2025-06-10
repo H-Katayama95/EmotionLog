@@ -35,7 +35,7 @@ namespace EmotionLog
             // 目標進捗のデータを読み込む
             LoadGoalProgresses();
             // 連続記録日数を読み込む
-            LoadConsecutiveRecord();
+            LoadConsecutiveRecords();
             // システム起動日の感情ログを読み込む
             LoadEmotionLogs();
             // ルーチンチェックのデータを読み込む
@@ -109,13 +109,33 @@ namespace EmotionLog
             EveningTextBox.Text = emotionLogs.EveningDetail ?? string.Empty;
         }
 
+        //// システム起動日の1日前の連続記録日数を取得
+        //private void LoadConsecutiveRecord()
+        //{
+        //    var repo = new EmotionLogsRepository();
+        //    int consecutiveRecord = repo.GetConsecutiveRecord();
+        //    ConsecutiveRecord.Text = consecutiveRecord.ToString("d");
+        //}
+
         // システム起動日の1日前の連続記録日数を取得
-        private void LoadConsecutiveRecord()
+        private void LoadConsecutiveRecords()
         {
             var repo = new EmotionLogsRepository();
-            int consecutiveRecord = repo.GetConsecutiveRecord();
-            ConsecutiveRecord.Text = consecutiveRecord.ToString("d");
+            ConsecutiveRecord consecutiveRecord = repo.GetConsecutiveRecords();
+            if (consecutiveRecord.Today_Consecutive_Record > 0)
+            {
+                ConsecutiveRecord.Text = consecutiveRecord.Today_Consecutive_Record.ToString("d");
+            }
+            else if (consecutiveRecord.Yesterday_Consecutive_Record > 0)
+            {
+                ConsecutiveRecord.Text = consecutiveRecord.Yesterday_Consecutive_Record.ToString("d");
+            }
+            else
+            {
+                ConsecutiveRecord.Text = "0";
+            }
         }
+
 
         private void LoadRoutineCheck()
         {
@@ -153,6 +173,7 @@ namespace EmotionLog
         private void saveButton_Click(object sender, RoutedEventArgs e)
         {
             var repo = new EmotionLogsRepository();
+
             EmotionLogs emotionLogs = new EmotionLogs
             {
                 MorningDetail = MorningTextBox.Text != null ? MorningTextBox.Text : string.Empty,
@@ -160,7 +181,8 @@ namespace EmotionLog
                 NoonDetail = NoonTextBox.Text != null ? NoonTextBox.Text : string.Empty,
                 NoonEmotionType = NoonComboBox.SelectedValue != null ? (int)NoonComboBox.SelectedValue : 0,
                 EveningDetail = EveningTextBox.Text != null ? EveningTextBox.Text : string.Empty,
-                EveningEmotionType = EveningComboBox.SelectedValue != null ? (int)EveningComboBox.SelectedValue : 0
+                EveningEmotionType = EveningComboBox.SelectedValue != null ? (int)EveningComboBox.SelectedValue : 0,
+                ConsecutiveRecord = ConsecutiveRecord.Text != null ? int.Parse(ConsecutiveRecord.Text) + 1 : 0,
             };
             // 文字数の入力チェック
             bool isValid = repo.ValidateEmotionLogs(emotionLogs);
@@ -173,6 +195,9 @@ namespace EmotionLog
             {
                 // 感情ログを保存
                 repo.UpsertEmotionLogs(emotionLogs);
+                //　連続記録日数の表示を更新
+                ConsecutiveRecord todayConsectiveRecord = repo.GetConsecutiveRecords();
+                ConsecutiveRecord.Text = todayConsectiveRecord.Today_Consecutive_Record.ToString("d");
             }
         }
 
