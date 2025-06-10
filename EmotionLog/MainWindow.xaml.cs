@@ -134,37 +134,23 @@ namespace EmotionLog
         // 朝の記録と感情を保存
         private void MorningSaveButton_Click(object sender, RoutedEventArgs e)
         {
-            var repo = new EmotionLogsRepository();
-            EmotionLogs emotionLogs = new EmotionLogs
-            {
-                MorningDetail = MorningTextBox.Text != null ? MorningTextBox.Text : string.Empty,
-                MorningEmotionType = MorningComboBox.SelectedValue != null ? (int)MorningComboBox.SelectedValue : 0,
-                NoonDetail = NoonTextBox.Text != null ? NoonTextBox.Text : string.Empty,
-                NoonEmotionType = NoonComboBox.SelectedValue != null ? (int)NoonComboBox.SelectedValue : 0,
-                EveningDetail = EveningTextBox.Text != null ? EveningTextBox.Text : string.Empty,
-                EveningEmotionType = EveningComboBox.SelectedValue != null ? (int)EveningComboBox.SelectedValue : 0
-            };
-            repo.UpsertEmotionLogs(emotionLogs);
+            saveButton_Click(sender, e);
         }
 
         // 昼の記録と感情を保存
         private void NoonSaveButton_Click(object sender, RoutedEventArgs e)
         {
-            var repo = new EmotionLogsRepository();
-            EmotionLogs emotionLogs = new EmotionLogs
-            {
-                MorningDetail = MorningTextBox.Text != null ? MorningTextBox.Text : string.Empty,
-                MorningEmotionType = MorningComboBox.SelectedValue != null ? (int)MorningComboBox.SelectedValue : 0,
-                NoonDetail = NoonTextBox.Text != null ? NoonTextBox.Text : string.Empty,
-                NoonEmotionType = NoonComboBox.SelectedValue != null ? (int)NoonComboBox.SelectedValue : 0,
-                EveningDetail = EveningTextBox.Text != null ? EveningTextBox.Text : string.Empty,
-                EveningEmotionType = EveningComboBox.SelectedValue != null ? (int)EveningComboBox.SelectedValue : 0
-            };
-            repo.UpsertEmotionLogs(emotionLogs);
+            saveButton_Click(sender, e);
         }
 
         // 夜の記録と感情を保存
         private void EveningSaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            saveButton_Click(sender, e);
+        }
+
+        // 共通処理
+        private void saveButton_Click(object sender, RoutedEventArgs e)
         {
             var repo = new EmotionLogsRepository();
             EmotionLogs emotionLogs = new EmotionLogs
@@ -176,7 +162,18 @@ namespace EmotionLog
                 EveningDetail = EveningTextBox.Text != null ? EveningTextBox.Text : string.Empty,
                 EveningEmotionType = EveningComboBox.SelectedValue != null ? (int)EveningComboBox.SelectedValue : 0
             };
-            repo.UpsertEmotionLogs(emotionLogs);
+            // 文字数の入力チェック
+            bool isValid = repo.ValidateEmotionLogs(emotionLogs);
+            if (!isValid)
+            {
+                MessageBox.Show("140字以内で入力してください", "入力エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            else
+            {
+                // 感情ログを保存
+                repo.UpsertEmotionLogs(emotionLogs);
+            }
         }
 
         private void RoutineCheckBox_Checked(object sender, RoutedEventArgs e)

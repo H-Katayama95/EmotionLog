@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using EmotionLog.Models;
 using Npgsql;
 
@@ -63,22 +64,22 @@ namespace EmotionLog.Repositories
         // 感情ログを挿入もしくは更新
         public void UpsertEmotionLogs(EmotionLogs emotionLogs)
         {
-           // EmotionLogs emotionLogs = new EmotionLogs();
+            try
+            {
+                using var connection = GetConnection();
+                using var command = connection.CreateCommand();
+                connection.Open();
 
-            using var connection = GetConnection();
-            using var command = connection.CreateCommand();
-            connection.Open();
+                command.Parameters.AddWithValue("recordDate", DateTime.Now);
+                command.Parameters.AddWithValue("morningEmotionType", emotionLogs.MorningEmotionType);
+                command.Parameters.AddWithValue("noonEmotionType", emotionLogs.NoonEmotionType);
+                command.Parameters.AddWithValue("eveningEmotionType", emotionLogs.EveningEmotionType);
+                command.Parameters.AddWithValue("morningDetail", emotionLogs.MorningDetail);
+                command.Parameters.AddWithValue("noonDetail", emotionLogs.NoonDetail);
+                command.Parameters.AddWithValue("eveningDetail", emotionLogs.EveningDetail);
+                command.Parameters.AddWithValue("consecutiveRecord", emotionLogs.ConsecutiveRecord);
 
-            command.Parameters.AddWithValue("recordDate", DateTime.Now);
-            command.Parameters.AddWithValue("morningEmotionType", emotionLogs.MorningEmotionType);
-            command.Parameters.AddWithValue("noonEmotionType", emotionLogs.NoonEmotionType);
-            command.Parameters.AddWithValue("eveningEmotionType", emotionLogs.EveningEmotionType);
-            command.Parameters.AddWithValue("morningDetail", emotionLogs.MorningDetail);
-            command.Parameters.AddWithValue("noonDetail", emotionLogs.NoonDetail);
-            command.Parameters.AddWithValue("eveningDetail", emotionLogs.EveningDetail);
-            command.Parameters.AddWithValue("consecutiveRecord", emotionLogs.ConsecutiveRecord);
-
-            command.CommandText = @"
+                command.CommandText = @"
                 INSERT INTO emotion_logs (
                     record_date,
                     morning_emotion_type,
@@ -111,7 +112,30 @@ namespace EmotionLog.Repositories
                     updated_at = NOW();
                 ";
 
-            command.ExecuteNonQuery();
+                command.ExecuteNonQuery();
+
+                MessageBox.Show("感情ログを保存しました。", "保存完了", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"感情ログの保存に失敗しました: {ex.Message}", "保存失敗", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }
+        }
+
+        // 感情ログの入力チェック
+        public bool ValidateEmotionLogs(EmotionLogs emotionLogs)
+        {
+            if (emotionLogs.MorningDetail != null && emotionLogs.MorningDetail.Length > 140 ||
+                emotionLogs.NoonDetail != null && emotionLogs.NoonDetail.Length > 140 ||
+                emotionLogs.EveningDetail != null && emotionLogs.EveningDetail.Length > 140)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         // システム起動日の1日前の連続記録日数を取得
