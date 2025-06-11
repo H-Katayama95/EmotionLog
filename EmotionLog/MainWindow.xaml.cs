@@ -53,14 +53,12 @@ namespace EmotionLog
 
             // 目標を登録済の場合、目標コンボボックスに設定
             var goalProgressRepo = new GoalProgressRepository();
-            List<GoalProgress> goalProgresses = goalProgressRepo.GetGoalProgress();
-            
-            if (goalProgresses.Count > 0)
-            {
-                GoalProgress goalId = goalProgresses.Where(x => !x.GoalStatus).FirstOrDefault();
+            int goalId = goalProgressRepo.GetGoalId();
 
+            if (goalId != 0)
+            {
                 // 登録済の目標を設定
-                GoalComboBox.SelectedValue = goalId?.GoalId;
+                GoalComboBox.SelectedValue = goalId;
                 GoalSaveButton.Content = "変更"; // ボタンのテキストを変更
             }
         }
@@ -90,13 +88,23 @@ namespace EmotionLog
             }
         }
 
+        // 目標進捗の初期表示
         private void LoadGoalProgresses()
         {
             var repo = new GoalProgressRepository();
-            List<GoalProgress> goalProgresses = repo.GetGoalProgress();
+            List<GoalProgress> goalProgressList = repo.GetRecentGoalProgress();
+            GoalProgress goalProgress = goalProgressList.Where(x => x.GoalStatus == false).FirstOrDefault();
+
             // 登録済のトータル回数を抽出し設定
-            GoalProgress total = goalProgresses.Where(x => !x.GoalStatus).FirstOrDefault();
-            Total.Text = total?.Total.ToString() ?? "0";    
+            if (goalProgress != null)
+            {
+                GoalComboBox.SelectedValue = goalProgress.GoalId;
+                Total.Text = goalProgress.Total.ToString();
+            }
+            else
+            {
+                Total.Text = "0"; // 初期値は0
+            }
         }
 
         // システム起動日の感情ログを取得し、出来事と感情を設定する
@@ -109,14 +117,6 @@ namespace EmotionLog
             NoonTextBox.Text = emotionLogs.NoonDetail ?? string.Empty;
             EveningTextBox.Text = emotionLogs.EveningDetail ?? string.Empty;
         }
-
-        //// システム起動日の1日前の連続記録日数を取得
-        //private void LoadConsecutiveRecord()
-        //{
-        //    var repo = new EmotionLogsRepository();
-        //    int consecutiveRecord = repo.GetConsecutiveRecord();
-        //    ConsecutiveRecord.Text = consecutiveRecord.ToString("d");
-        //}
 
         // システム起動日の1日前の連続記録日数を取得
         private void LoadConsecutiveRecords()
@@ -146,9 +146,9 @@ namespace EmotionLog
 
         private void GoalComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selectedGoal = GoalComboBox.SelectedItem as Goal;
+            Goal? selectedGoal = GoalComboBox.SelectedItem as Goal;
 
-            string goalCount = selectedGoal.GoalCount.ToString() ?? "0";
+            string goalCount = selectedGoal?.GoalCount.ToString() ?? "0";
             GoalCount.Text = goalCount;
         }
 
@@ -242,16 +242,17 @@ namespace EmotionLog
             }
             else
             {
-                List<GoalProgress> goalProgresses = repo.GetGoalProgress();
-                if (goalProgresses.Count > 0)
+                List<GoalProgress> goalProgressList = repo.GetGoalProgress();
+
+                // すでに目標が登録されている場合、目標の変更処理を行う
+                if (goalProgressList.Count > 0)
                 {
-                    if (MessageBoxResult.Cancel == MessageBox.Show("目標を変更してもよいでしょうか。", "変更確認", MessageBoxButton.OKCancel, MessageBoxImage.Information))
+                    ChangeGoal(repo, goalProgressList, selectedGoalId);
+                }
+                else
+                {
+                    if (GoalComboBox.SelectedValue is int selectedId)
                     {
-                        return; // キャンセルされた場合は処理を中止
-                    }
-                    else
-                    {
-                        // （仮）更新処理に変える
                         repo.InsertGoalProgress(new GoalProgress
                         {
                             GoalId = (int)GoalComboBox.SelectedValue,
@@ -263,19 +264,6 @@ namespace EmotionLog
                             RecordDate = DateTime.Now
                         });
                     }
-                }
-                else
-                {
-                    repo.InsertGoalProgress(new GoalProgress
-                    {
-                        GoalId = (int)GoalComboBox.SelectedValue,
-                        GoalSetDate = DateTime.Now,
-                        Total = 0, // 初期値は0
-                        GoalStatus = false, // 初期状態は未達成
-                        CreatedAt = DateTime.Now,
-                        UpdatedAt = DateTime.Now,
-                        RecordDate = DateTime.Now
-                    });
                     MessageBox.Show("目標を登録しました。", "登録完了", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 // 目標を登録したので、ボタンのテキストを変更
@@ -283,6 +271,33 @@ namespace EmotionLog
             }
         }
 
+        //　目標の変更処理
+        private void ChangeGoal(GoalProgressRepository repo, List<GoalProgress> goalProgressList, int selectedGoalId)
+        {
+            if (MessageBoxResult.Cancel == MessageBox.Show("目標を変更してもよいでしょうか。", "変更確認", MessageBoxButton.OKCancel, MessageBoxImage.Information))
+            {
+                return; // キャンセルされた場合は処理を中止
+            }
+            else
+            {
+                GoalProgress latestGoalProgress = goalProgressList.FirstOrDefault();
+
+                // 前の目標のステータスを済に更新する
+                repo.UpdateGoalProgress(latestGoalProgress);
+
+                // 新しい目標を登録
+                repo.InsertGoalProgress(new GoalProgress
+                {
+                    GoalId = selectedGoalId,
+                    GoalSetDate = DateTime.Now,
+                    Total = 0, // 初期値は0
+                    GoalStatus = false, // 初期状態は未達成
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    RecordDate = DateTime.Now
+                });
+            }
+        }
 
         private void RoutineSaveButton_Click(object sender, RoutedEventArgs e)
         {
