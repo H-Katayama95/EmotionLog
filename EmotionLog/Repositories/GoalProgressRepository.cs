@@ -171,7 +171,7 @@ namespace EmotionLog.Repositories
                 command.Parameters.AddWithValue("goalSetDate", goalProgress.GoalSetDate);
                 command.Parameters.AddWithValue("goalAchievedDate", (object)goalProgress.GoalAchievedDate ?? DBNull.Value);
                 command.Parameters.AddWithValue("total", goalProgress.Total);
-                command.Parameters.AddWithValue("goalStatus", true);
+                command.Parameters.AddWithValue("goalStatus", goalProgress.GoalStatus);
                 command.Parameters.AddWithValue("updatedAt", DateTime.Now);
                 command.Parameters.AddWithValue("recordDate", DateTime.Now);
                 command.Parameters.AddWithValue("goalProgressId", goalProgress.GoalProgressId);

@@ -211,7 +211,10 @@ namespace EmotionLog
         private void RoutineCheckBox_UnChecked(object sender, RoutedEventArgs e)
         {
             string total = Total.Text;
-            total = (int.Parse(total) - 1).ToString();
+            if(int.Parse(total) > 0)
+            {
+                total = (int.Parse(total) - 1).ToString();
+            }
             Total.Text = total;
         }
 
@@ -274,7 +277,7 @@ namespace EmotionLog
         //　目標の変更処理
         private void ChangeGoal(GoalProgressRepository repo, List<GoalProgress> goalProgressList, int selectedGoalId)
         {
-            if (MessageBoxResult.Cancel == MessageBox.Show("目標を変更してもよいでしょうか。", "変更確認", MessageBoxButton.OKCancel, MessageBoxImage.Information))
+            if (MessageBoxResult.Cancel == MessageBox.Show("回数がリセットされてしまいますが、目標を変更してもよろしいでしょうか？", "変更確認", MessageBoxButton.OKCancel, MessageBoxImage.Information))
             {
                 return; // キャンセルされた場合は処理を中止
             }
@@ -283,6 +286,7 @@ namespace EmotionLog
                 GoalProgress latestGoalProgress = goalProgressList.FirstOrDefault();
 
                 // 前の目標のステータスを済に更新する
+                latestGoalProgress.GoalStatus = true; // 目標は達成済みとする
                 repo.UpdateGoalProgress(latestGoalProgress);
 
                 // 新しい目標を登録
@@ -296,11 +300,29 @@ namespace EmotionLog
                     UpdatedAt = DateTime.Now,
                     RecordDate = DateTime.Now
                 });
+
+                Total.Text = "0"; // トータル回数をリセット
             }
         }
 
         private void RoutineSaveButton_Click(object sender, RoutedEventArgs e)
         {
+            var repo = new GoalProgressRepository();
+            var goalProgress = repo.GetGoalProgress().FirstOrDefault();
+            goalProgress.Total = int.Parse(Total.Text);
+
+            if(goalProgress.Total >= int.Parse(GoalCount.Text))
+            {
+                goalProgress.GoalAchievedDate = DateTime.Now; // 目標達成日を設定
+                goalProgress.GoalStatus = true; // 目標は達成済み
+                MessageBox.Show("目標を達成しました！", "目標達成", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                goalProgress.GoalStatus = false; // 目標は未達成のまま
+                MessageBox.Show("今日の日課を登録しました！", "日課登録", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            repo.UpdateGoalProgress(goalProgress);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
