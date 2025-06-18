@@ -61,6 +61,48 @@ namespace EmotionLog.Repositories
             return emotionLogs;
         }
 
+        // 過去の感情ログを取得
+        public List<PastEmotionLogs> GetPastEmotionLogs()
+        {
+            List<PastEmotionLogs> pastEmotionLogsList = new List<PastEmotionLogs>();
+
+            using var connection = GetConnection();
+            using var command = connection.CreateCommand();
+            connection.Open();
+
+            command.CommandText = @"
+            SELECT
+                logs.record_date,
+                logs.morning_detail,
+                mas1.emotion_name AS moring_emoname,
+                logs.noon_detail,
+                mas2.emotion_name AS noon_emoname,
+                logs.evening_detail,
+                mas3.emotion_name AS evening_emoname
+            FROM emotion_logs logs
+                LEFT JOIN emotion_master AS mas1 ON mas1.emotion_type_id = logs.morning_emotion_type
+                LEFT JOIN emotion_master AS mas2 ON mas2.emotion_type_id = logs.noon_emotion_type
+                LEFT JOIN emotion_master AS mas3 ON mas3.emotion_type_id = logs.evening_emotion_type;";
+            using var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                PastEmotionLogs pastEmotionLogs = new PastEmotionLogs
+                {
+                    RecordDate = reader.GetDateTime(0),
+                    MorningDetail = reader.IsDBNull(1) ? null : reader.GetString(1),
+                    MorningEmoName = reader.IsDBNull(2) ? null : reader.GetString(2),
+                    NoonDetail = reader.IsDBNull(3) ? null : reader.GetString(3),
+                    NoonEmoName = reader.IsDBNull(4) ? null : reader.GetString(4),
+                    EveningDetail = reader.IsDBNull(5) ? null : reader.GetString(5),
+                    EveningEmoName = reader.IsDBNull(6) ? null : reader.GetString(6)
+                };
+                pastEmotionLogsList.Add(pastEmotionLogs);   
+            }
+
+            return pastEmotionLogsList;
+        }
+
         // 感情ログを挿入もしくは更新
         public void UpsertEmotionLogs(EmotionLogs emotionLogs)
         {

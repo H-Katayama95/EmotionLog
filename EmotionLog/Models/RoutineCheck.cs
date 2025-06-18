@@ -16,4 +16,12 @@ namespace EmotionLog.Models
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
+
+    public class  PastRoutineCheck
+    {
+        public int RoutineCheckId { get; set; }
+        public DateTime RecordDate { get; set; }
+        public bool IsChecked { get; set; }
+        public string GoalContent { get; set; }
+    }
 }
