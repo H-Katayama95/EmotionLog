@@ -82,7 +82,8 @@ namespace EmotionLog.Repositories
             FROM emotion_logs logs
                 LEFT JOIN emotion_master AS mas1 ON mas1.emotion_type_id = logs.morning_emotion_type
                 LEFT JOIN emotion_master AS mas2 ON mas2.emotion_type_id = logs.noon_emotion_type
-                LEFT JOIN emotion_master AS mas3 ON mas3.emotion_type_id = logs.evening_emotion_type;";
+                LEFT JOIN emotion_master AS mas3 ON mas3.emotion_type_id = logs.evening_emotion_type
+             ORDER BY logs.record_date ASC ;";
             using var reader = command.ExecuteReader();
 
             while (reader.Read())

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EmotionLog"
         mc:Ignorable="d"
-        Title="Emotion Log" Height="598" Width="525">
+        Title="Emotion Log" Height="800" Width="525">
 
     <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
 </Window>

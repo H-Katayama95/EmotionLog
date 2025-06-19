@@ -70,7 +70,7 @@ namespace EmotionLog
         private void LoadRoutineCheck(string date)
         {
             var repo = new RoutineCheckRepository();
-            PastRoutineCheck routineCheck = repo.GetPastRoutineCheck().FirstOrDefault(x => x.RecordDate.ToString("d") == date);
+            PastRoutineCheck routineCheck = repo.GetPastRoutineCheck().LastOrDefault(x => x.RecordDate.ToString("d") == date);
             if(routineCheck == null)
             {
                 RoutineText.Text = "記録していません";
@@ -94,8 +94,8 @@ namespace EmotionLog
                 if (date != null)
                 {
                     var repo = new EmotionLogsRepository();
-                    var tes = repo.GetPastEmotionLogs().Where(x => x.RecordDate.ToString("d") == date).ToList();
-                    if(tes == null || !tes.Any())
+                    var selectedData = repo.GetPastEmotionLogs().Where(x => x.RecordDate.ToString("d") == date).ToList();
+                    if(selectedData.Count == 0)
                     {
                         MoringRecord.Text = "記録はありません。";
                         MoringEmotion.Text = string.Empty;
@@ -108,7 +108,7 @@ namespace EmotionLog
                     }
                     else
                     {
-                        SetPastEmotionLogs(tes, date);
+                        SetPastEmotionLogs(selectedData, date);
                     }
                 }
             }
