@@ -139,12 +139,6 @@ namespace EmotionLog
         }
 
 
-        //private void LoadRoutineCheck()
-        //{
-        //    var repo = new RoutineCheckRepository();
-        //    List<RoutineCheck> routineChecks = repo.GetRoutineCheck();
-        //}
-
         private void GoalComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Goal? selectedGoal = GoalComboBox.SelectedItem as Goal;
