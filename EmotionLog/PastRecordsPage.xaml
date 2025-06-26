@@ -5,10 +5,10 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:local="clr-namespace:EmotionLog"
       mc:Ignorable="d" 
-      Background="White"
-      Title="PastRecordsPage" Height="598" Width="525">
+      Background="#F2F2F2"
+      Title="PastRecordsPage" Height="Auto" Width="525">
 
-    <Grid Width="525" Margin="0,0,0,10" HorizontalAlignment="Center">
+    <Grid Width="525" Margin="0,30,0,10" HorizontalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <!-- 日付とルーチン -->
@@ -48,6 +48,6 @@
 
         <!-- ボタン -->
         <Button Grid.Row="4" Content="HOME" HorizontalAlignment="Center" Margin="0,20,0,0"
-                Click="HomeButton_Click" Width="100" Height="30" FontSize="15"/>
+                Click="HomeButton_Click" Width="100" Height="40" FontSize="15"/>
     </Grid>
 </Page>

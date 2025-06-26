@@ -41,7 +41,7 @@ namespace EmotionLog
             // システム起動日の感情ログを読み込む
             LoadEmotionLogs();
             //// ルーチンチェックのデータを読み込む
-            //LoadRoutineCheck();
+            LoadRoutineCheck();
         }
         private void LoadGoals()
         {
@@ -135,6 +135,25 @@ namespace EmotionLog
             else
             {
                 ConsecutiveRecord.Text = "0";
+            }
+        }
+
+        private void LoadRoutineCheck()
+        {
+            var repo = new RoutineCheckRepository();
+            List<RoutineCheck> routineCheckList = repo.GetRoutineCheck();
+            RoutineCheck todayCheck = routineCheckList.Where(x => x.RecordDate.Date == DateTime.Now.Date).LastOrDefault();
+            bool isChecked = todayCheck?.IsChecked ?? false;
+            string total = todayCheck?.Total.ToString() ?? "0";
+
+            if (isChecked)
+            {
+                RoutineCheckBox.IsChecked = true;
+                Total.Text = total;
+            }
+            else
+            {
+                RoutineCheckBox.IsChecked = false;
             }
         }
 
@@ -274,6 +293,7 @@ namespace EmotionLog
         {
             if (MessageBoxResult.Cancel == MessageBox.Show("回数がリセットされてしまいますが、目標を変更してもよろしいでしょうか？", "変更確認", MessageBoxButton.OKCancel, MessageBoxImage.Information))
             {
+                GoalComboBox.SelectedValue = goalProgressList.FirstOrDefault()?.GoalId; // 変更前の目標を再設定S
                 return; // キャンセルされた場合は処理を中止
             }
             else
