@@ -60,7 +60,7 @@
 
 
             <!-- 朝の記録 -->
-            <materialDesign:Card Padding="16" Margin="0,40,0,40" materialDesign:ElevationAssist.Elevation="Dp2" materialDesign:UniformCornerRadius="16">
+            <materialDesign:Card Padding="16" Margin="0,40,0,0" materialDesign:ElevationAssist.Elevation="Dp2" materialDesign:UniformCornerRadius="16">
                 <StackPanel>
                     <TextBlock FontSize="30" Text="🌅" Margin="10,0,0,8"/>
                     <Separator Background="#DDD" Height="10" Width="451"/>
@@ -78,13 +78,14 @@
             </materialDesign:Card>
 
             <!-- 昼の記録 -->
-            <materialDesign:Card Padding="16" Margin="0,0,0,20">
+            <materialDesign:Card Padding="16" Margin="0,20,0,0" materialDesign:ElevationAssist.Elevation="Dp2" materialDesign:UniformCornerRadius="16">
                 <StackPanel>
-                    <TextBlock FontSize="30" Text="🌞" Margin="0,0,0,8"/>
-                    <TextBox x:Name="NoonTextBox" Height="100" FontSize="12"
-                             Margin="0,0,0,8"/>
+                    <TextBlock FontSize="30" Text="🌞" Margin="10,0,0,8"/>
+                    <Separator Background="#DDD" Height="10" Width="451"/>
+                    <TextBox x:Name="NoonTextBox" TextWrapping="Wrap" Height="150" FontSize="15"
+                             Margin="10,0,20,8"/>
                     <StackPanel Orientation="Horizontal">
-                        <ComboBox x:Name="NoonComboBox" Width="100" Margin="0,0,8,0"/>
+                        <ComboBox x:Name="NoonComboBox" FontSize="16" Width="120"  Margin="10,8,8,0"/>
                         <Button Content="保存" Click="NoonSaveButton_Click" FontSize="13" Width="60"
                         Style="{StaticResource MaterialDesignOutlinedButton}"
                         materialDesign:ButtonAssist.CornerRadius="12"
@@ -94,21 +95,25 @@
             </materialDesign:Card>
 
             <!-- 夜の記録 -->
-            <materialDesign:Card Padding="16" Margin="0,0,0,20">
+            <materialDesign:Card Padding="16" Margin="0,20,0,40" materialDesign:ElevationAssist.Elevation="Dp2" materialDesign:UniformCornerRadius="16">
                 <StackPanel>
-                    <TextBlock FontSize="30" Text="🌙" Margin="0,0,0,8"/>
-                    <TextBox x:Name="EveningTextBox" Height="100" FontSize="12"
-                             TextChanged="EveningTextBox_TextChanged" Margin="0,0,0,8"/>
+                    <TextBlock FontSize="30" Text="🌙" Margin="10,0,0,8"/>
+                    <Separator Background="#DDD" Height="10" Width="451"/>
+                    <TextBox x:Name="EveningTextBox" TextWrapping="Wrap" Height="150" FontSize="15"
+                             TextChanged="EveningTextBox_TextChanged" Margin="10,0,20,8"/>
                     <StackPanel Orientation="Horizontal">
-                        <ComboBox x:Name="EveningComboBox" Width="100" Margin="0,0,8,0"/>
-                        <Button Content="保存" Click="EveningSaveButton_Click" FontSize="10"/>
+                        <ComboBox x:Name="EveningComboBox" FontSize="16" Width="120" Margin="10,8,8,0"/>
+                        <Button Content="保存" Click="EveningSaveButton_Click" FontSize="13" Width="60"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        materialDesign:ButtonAssist.CornerRadius="12"
+                        Padding="12,6"/>
                     </StackPanel>
                 </StackPanel>
             </materialDesign:Card>
 
             <!-- 過去の記録を見る -->
-            <Button x:Name="PastRecordsButton" Content="過去の記録をみる"
-                    Click="PastRecordsButton_Click" FontSize="10" HorizontalAlignment="Center"/>
+            <Button x:Name="PastRecordsButton" Content="過去の記録をみる" Margin="0,0,0,40"
+                    Click="PastRecordsButton_Click" FontSize="15" Height="50" Width="250" HorizontalAlignment="Center"/>
         </StackPanel>
     </ScrollViewer>
 </Page>

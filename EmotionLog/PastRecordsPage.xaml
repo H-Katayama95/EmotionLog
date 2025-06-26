@@ -8,16 +8,46 @@
       Background="White"
       Title="PastRecordsPage" Height="598" Width="525">
 
-    <Grid HorizontalAlignment="Center" Width="525" Margin="0,0,0,10">
-        <DatePicker x:Name="RecordDate" HorizontalAlignment="Left" Margin="28,41,0,0" VerticalAlignment="Top" 
-         SelectedDateChanged="RecordDate_SelectedDateChanged"/>
-        <Button Content="HOME" HorizontalAlignment="Left" Margin="224,402,0,0" VerticalAlignment="Top" Click="HomeButton_Click" FontSize="10.5"/>
-        <TextBlock x:Name="MoringRecord" HorizontalAlignment="Left" Height="69" Margin="28,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="467"></TextBlock>
-        <TextBlock x:Name="MoringEmotion" HorizontalAlignment="Left" Height="20" Margin="28,158,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="467"></TextBlock>
-        <TextBlock x:Name="NoonRecord" HorizontalAlignment="Left" Margin="28,191,0,0" Height="69" TextWrapping="Wrap" VerticalAlignment="Top" Width="467"></TextBlock>
-        <TextBlock x:Name="NoonEmotion" HorizontalAlignment="Left" Height="20" Margin="28,260,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="467"></TextBlock>
-        <TextBlock x:Name="EveningRecord" HorizontalAlignment="Left" Height="70" TextWrapping="Wrap" VerticalAlignment="Top" Width="467" Margin="28,294,0,0" Text=""/>
-        <TextBlock x:Name="EveningEmotion" HorizontalAlignment="Left" Height="20" Margin="28,364,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="467" Text=""/>
-        <TextBlock x:Name="RoutineText" HorizontalAlignment="Left" Height="25" Margin="182,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="127"><Run Language="ja-jp" Text="目標"/></TextBlock>
+    <Grid Width="525" Margin="0,0,0,10" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- 日付とルーチン -->
+            <RowDefinition Height="Auto"/>
+            <!-- 朝 -->
+            <RowDefinition Height="Auto"/>
+            <!-- 昼 -->
+            <RowDefinition Height="Auto"/>
+            <!-- 夜 -->
+            <RowDefinition Height="Auto"/>
+            <!-- ボタン -->
+        </Grid.RowDefinitions>
+
+        <!-- 日付・ルーチン -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="28,8,0,8" HorizontalAlignment="Left">
+            <DatePicker x:Name="RecordDate" FontSize="20" Width="120" SelectedDateChanged="RecordDate_SelectedDateChanged"/>
+            <TextBlock x:Name="RoutineText" FontSize="20" Margin="20,5,0,0"/>
+        </StackPanel>
+
+        <!-- 朝 -->
+        <StackPanel Grid.Row="1" Margin="28,20,0,0" HorizontalAlignment="Left">
+            <TextBlock x:Name="MoringRecord" FontSize="15" TextWrapping="Wrap" Height="Auto" Width="400"/>
+            <TextBlock x:Name="MoringEmotion" FontSize="15" TextWrapping="Wrap" Height="Auto" Width="Auto"/>
+        </StackPanel>
+
+        <!-- 昼 -->
+        <StackPanel Grid.Row="2" Margin="28,20,0,0" HorizontalAlignment="Left">
+            <TextBlock x:Name="NoonRecord" FontSize="15" TextWrapping="Wrap" Height="Auto" Width="400"/>
+            <TextBlock x:Name="NoonEmotion" FontSize="15" TextWrapping="Wrap" Height="Auto" Width="Auto"/>
+        </StackPanel>
+
+        <!-- 夜 -->
+        <StackPanel Grid.Row="3" Margin="28,20,0,0" HorizontalAlignment="Left">
+            <TextBlock x:Name="EveningRecord" FontSize="15" TextWrapping="Wrap" Height="Auto" Width="400"/>
+            <TextBlock x:Name="EveningEmotion" FontSize="15" TextWrapping="Wrap" Height="Auto" Width="Auto"/>
+        </StackPanel>
+
+        <!-- ボタン -->
+        <Button Grid.Row="4" Content="HOME" HorizontalAlignment="Center" Margin="0,20,0,0"
+                Click="HomeButton_Click" Width="100" Height="30" FontSize="15"/>
     </Grid>
 </Page>
